@@ -3,32 +3,27 @@ public:
     vector<int> avoidFlood(vector<int>& rains) {
         int n = rains.size();
         vector<int> ans(n, 1);
-        unordered_map<int, int> full;
-        set<int> dryDays; //
+        unordered_map<int, int> lastRain;
+        set<int> dryDays;
+        ans.reserve(n);
 
         for (int i = 0; i < n; ++i) {
-            if (rains[i] == 0) {
+            int lake = rains[i];
+            if (lake == 0) {
                 dryDays.insert(i);
             } else {
-                int lake = rains[i];
                 ans[i] = -1;
+                if (lastRain.count(lake)) {
 
-                if (full.count(lake)) {
-
-                    int lastRainDay = full[lake];
-                    auto dryIt = dryDays.lower_bound(lastRainDay);
-                    if (dryIt == dryDays.end()) {
-
+                    auto it = dryDays.lower_bound(lastRain[lake]);
+                    if (it == dryDays.end())
                         return {};
-                    }
-                    ans[*dryIt] = lake;
-                    dryDays.erase(dryIt);
+                    ans[*it] = lake;
+                    dryDays.erase(it);
                 }
-
-                full[lake] = i;
+                lastRain[lake] = i;
             }
         }
-
         return ans;
     }
 };
