@@ -1,22 +1,24 @@
 class Solution {
- public:
-  // Similar to 3349. Adjacent Increasing Subarrays Detection I
-  int maxIncreasingSubarrays(vector<int>& nums) {
-    int ans = 0;
-    int increasing = 1;
-    int prevIncreasing = 0;
+public:
+    int maxIncreasingSubarrays(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> left(n, 1), right(n, 1);
 
-    for (int i = 1; i < nums.size(); ++i) {
-      if (nums[i] > nums[i - 1]) {
-        ++increasing;
-      } else {
-        prevIncreasing = increasing;
-        increasing = 1;
-      }
-      ans = max(ans, increasing / 2);
-      ans = max(ans, min(prevIncreasing, increasing));
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] > nums[i - 1])
+                left[i] = left[i - 1] + 1;
+        }
+
+        for (int i = n - 2; i >= 0; --i) {
+            if (nums[i] < nums[i + 1])
+                right[i] = right[i + 1] + 1;
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n - 1; ++i) {
+            ans = max(ans, min(left[i], right[i + 1]));
+        }
+
+        return ans;
     }
-
-    return ans;
-  }
 };
