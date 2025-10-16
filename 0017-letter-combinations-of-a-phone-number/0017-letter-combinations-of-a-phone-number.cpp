@@ -24,6 +24,7 @@ public:
 
     vector<string> letterCombinations(string digits) {
         vector<string> ans;
+        // empty string case 
         if (digits.length() == 0)
             return ans;
 
